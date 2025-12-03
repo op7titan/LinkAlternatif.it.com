@@ -66,8 +66,15 @@
         /* ========================================= */
         /* CSS TAMBAHAN KHUSUS BERITA (AXIO STYLE)   */
         /* ========================================= */
-        .container { padding: 0 15px; margin: 0 auto; }
-        .page-header { font-size: 18px; font-weight: 700; color: #ffe001; margin-bottom: 20px; border-left: 4px solid #c10001; padding-left: 10px; text-transform: uppercase; }
+        /* --- BERITA (NEWS SECTION) --- */
+        .container { padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto; }
+        
+        .breadcrumb-container { margin-top: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; border: 1px solid #705dd3; }
+        .breadcrumb-list { list-style: none; display: flex; padding: 0; margin: 0; font-size: 12px; }
+        .breadcrumb-item + .breadcrumb-item::before { content: "/"; padding: 0 5px; color: #ccc; }
+        .breadcrumb-link { color: #ccc; font-weight: 600; }
+        
+        .page-header { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 20px; border-left: 4px solid #705dd3; padding-left: 10px; text-transform: uppercase; }
         
         .row { display: flex; flex-wrap: wrap; margin-right: -7.5px; margin-left: -7.5px; }
         .col-md-6 { position: relative; width: 100%; padding-right: 7.5px; padding-left: 7.5px; box-sizing: border-box; margin-bottom: 15px; }
@@ -193,12 +200,18 @@
         </div>
 
         <div class="container">
+
+            <nav class="breadcrumb-container">
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-item"><a href="https://axio88h.com/" class="breadcrumb-link">AXIO88</a></li>
+                    <li class="breadcrumb-item"><a href="https://axio88h.com/news" class="breadcrumb-link">News</a></li>
+                </ul>
+            </nav>    
+            
             <div class="home__seo">
                 <div class="game__seo" style="background:transparent; padding:0;">
                     <div class="page-header">Berita Terbaru AXIO88</div>
                     
-
-
             <div class="news-list">
                 <div class="row">
                     
