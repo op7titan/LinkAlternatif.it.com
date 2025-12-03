@@ -55,7 +55,7 @@
     }
     .brand-name { font-size: 1.4em; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #fff; text-shadow: 0 0 5px #00d2ff; }
 
-    /* --- PROVIDER SCROLLER --- */
+    /* --- PROVIDER SCROLLER (2 ROWS) --- */
     .provider-section {
       width: 100%; max-width: 100vw; margin: 20px 0; text-align: center;
       overflow: hidden;
@@ -69,15 +69,19 @@
     .scroller {
       position: relative;
       width: 100%;
+      height: 140px; /* Tinggi untuk 2 baris (60px + margin x 2) */
       overflow: hidden;
       -webkit-mask: linear-gradient(90deg, transparent, white 5%, white 95%, transparent);
       mask: linear-gradient(90deg, transparent, white 5%, white 95%, transparent);
     }
     
     .scroller-inner {
-      display: flex;
+      display: grid;
+      grid-template-rows: repeat(2, 1fr); /* 2 Baris */
+      grid-auto-flow: column; /* Mengisi ke samping */
+      gap: 10px 20px; /* Jarak antar logo vertikal & horizontal */
       width: max-content;
-      animation: scroll 120s linear infinite; 
+      animation: scroll 60s linear infinite; /* Kecepatan scroll */
       will-change: transform;
     }
     
@@ -85,7 +89,6 @@
       display: flex; align-items: center; justify-content: center;
       text-decoration: none;
       flex-shrink: 0;
-      margin: 0 10px; 
     }
     .scroller-inner a:hover { transform: scale(1.1); z-index: 10; transition: transform 0.2s; }
 
@@ -111,7 +114,7 @@
       100% { transform: translateX(-50%); } 
     }
 
-    /* --- 3. 3D SCENE (8-SIDED DIAMOND PRISM) --- */
+    /* --- 3. 3D SCENE (CUBE 6-SIDED) --- */
     .scene-container {
       flex-grow: 1;
       display: flex; flex-direction: column;
@@ -123,35 +126,35 @@
     /* Wrapper Utama (Rotasi X & Y) */
     .pivot-wrapper {
       position: relative;
-      width: 120px; height: 160px; 
+      /* UBAH KE KOTAK: Lebar dan Tinggi sama */
+      width: 140px; height: 140px; 
       transform-style: preserve-3d;
-      transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
       will-change: transform;
       transform: rotateX(-15deg) rotateY(var(--rotY, 0deg));
     }
 
-    /* Auto Spinner (Berputar Terus) */
+    /* Auto Spinner (Berputar Terus saat idle) */
     .auto-spinner {
       width: 100%; height: 100%;
       transform-style: preserve-3d;
-      animation: spinOctagon 15s linear infinite;
+      animation: spinCube 18s linear infinite; /* Sedikit diperlambat untuk multi-axis */
       will-change: transform;
     }
     .stop-anim { animation: none; }
 
-    @keyframes spinOctagon {
-      /* Miring sedikit (-15deg) agar terlihat 3D, lalu putar Y */
-      0% { transform: rotateX(-15deg) rotateY(0deg); }
-      100% { transform: rotateX(-15deg) rotateY(360deg); }
+    /* UPDATE: Animasi Putar Segala Arah (X, Y, Z) */
+    @keyframes spinCube {
+      0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
     }
 
-    /* --- FACE STYLING (OPTIMIZED) --- */
+    /* --- FACE STYLING (6 SISI KUBUS) --- */
     .face {
       position: absolute;
-      width: 120px; height: 160px;
+      width: 140px; height: 140px;
       background: #0a1428; 
-      /* Tambahkan border tipis agar sisi terlihat jelas sebagai segi-8 */
-      border: 1px solid rgba(0, 210, 255, 0.3);
+      border: 1px solid rgba(0, 210, 255, 0.5); /* Border agar bentuk kotak terlihat jelas */
       display: block; 
       
       backface-visibility: hidden;
@@ -163,7 +166,6 @@
       border-radius: 4px;
     }
     
-    /* Gambar Statis (sangat stabil) */
     .face amp-img { 
       border-radius: 4px; 
       object-fit: cover;
@@ -172,38 +174,34 @@
       pointer-events: none;
     }
 
-    /* GEOMETRI OKTAGON (8 SISI) PRESISI
-       Lebar 120px -> Apothem ~145px
+    /* GEOMETRI KUBUS (6 SISI)
+       Lebar sisi = 140px. Jarak ke pusat = 140 / 2 = 70px.
     */
-    .f1 { transform: rotateY(0deg)   translateZ(145px); }
-    .f2 { transform: rotateY(45deg)  translateZ(145px); }
-    .f3 { transform: rotateY(90deg)  translateZ(145px); }
-    .f4 { transform: rotateY(135deg) translateZ(145px); }
-    .f5 { transform: rotateY(180deg) translateZ(145px); }
-    .f6 { transform: rotateY(225deg) translateZ(145px); }
-    .f7 { transform: rotateY(270deg) translateZ(145px); }
-    .f8 { transform: rotateY(315deg) translateZ(145px); }
+    .f1 { transform: rotateY(0deg)   translateZ(70px); }  /* Depan */
+    .f2 { transform: rotateY(180deg) translateZ(70px); }  /* Belakang */
+    .f3 { transform: rotateY(90deg)  translateZ(70px); }  /* Kanan */
+    .f4 { transform: rotateY(-90deg) translateZ(70px); }  /* Kiri */
+    .f5 { transform: rotateX(90deg)  translateZ(70px); }  /* Atas */
+    .f6 { transform: rotateX(-90deg) translateZ(70px); }  /* Bawah */
 
-    /* --- EFEK BUKA (EXPLODE) --- */
+    /* --- EFEK BUKA (EXPLODE CUBE) --- */
     .pivot-wrapper.is-open .face {
       border: 2px solid #ff00cc;
       box-shadow: 0 0 30px rgba(255, 0, 204, 0.7);
     }
-    /* Saat meledak, translateZ ditambah 80px */
-    .pivot-wrapper.is-open .f1 { transform: rotateY(0deg)   translateZ(225px); }
-    .pivot-wrapper.is-open .f2 { transform: rotateY(45deg)  translateZ(225px); }
-    .pivot-wrapper.is-open .f3 { transform: rotateY(90deg)  translateZ(225px); }
-    .pivot-wrapper.is-open .f4 { transform: rotateY(135deg) translateZ(225px); }
-    .pivot-wrapper.is-open .f5 { transform: rotateY(180deg) translateZ(225px); }
-    .pivot-wrapper.is-open .f6 { transform: rotateY(225deg) translateZ(225px); }
-    .pivot-wrapper.is-open .f7 { transform: rotateY(270deg) translateZ(225px); }
-    .pivot-wrapper.is-open .f8 { transform: rotateY(315deg) translateZ(225px); }
+    /* Saat meledak, translateZ ditambah 80px (menjadi 150px) */
+    .pivot-wrapper.is-open .f1 { transform: rotateY(0deg)   translateZ(150px); }
+    .pivot-wrapper.is-open .f2 { transform: rotateY(180deg) translateZ(150px); }
+    .pivot-wrapper.is-open .f3 { transform: rotateY(90deg)  translateZ(150px); }
+    .pivot-wrapper.is-open .f4 { transform: rotateY(-90deg) translateZ(150px); }
+    .pivot-wrapper.is-open .f5 { transform: rotateX(90deg)  translateZ(150px); }
+    .pivot-wrapper.is-open .f6 { transform: rotateX(-90deg) translateZ(150px); }
 
     /* CORE (HADIAH) */
     .core {
       position: absolute; width: 100px; height: 100px;
       background: radial-gradient(circle, #fff, #ff00cc, #220022);
-      top: 30px; left: 10px;
+      top: 20px; left: 20px; /* Center relatif terhadap 140x140 */
       border-radius: 50%;
       transform: rotateY(0deg);
       box-shadow: 0 0 60px #ff00cc, 0 0 100px #ff00cc;
@@ -216,7 +214,6 @@
     /* --- CONTROLS --- */
     .controls { padding: 30px; text-align: center; z-index: 100; position: relative; }
     
-    /* Ganti button dengan 'a' tag untuk link yang lebih stabil */
     .btn-action {
       background: linear-gradient(90deg, #ff00cc, #3333ff);
       border: none; padding: 15px 40px;
@@ -226,7 +223,7 @@
       cursor: pointer; text-transform: uppercase;
       transition: transform 0.1s;
       text-decoration: none;
-      display: inline-block; /* Agar properti padding berfungsi pada tag a */
+      display: inline-block;
     }
     .btn-action:active { transform: scale(0.95); }
 
@@ -253,7 +250,9 @@
 
   <div class="overlay-dim"></div>
 
-  <!-- STATE MANAGEMENT -->
+  <!-- STATE MANAGEMENT 
+       targets: Sudut rotasi untuk 4 sisi utama (Depan, Belakang, Kiri, Kanan) = kelipatan 90
+  -->
   <amp-state id="app">
     <script type="application/json">
       {
@@ -262,7 +261,10 @@
         "linkIdx": 0,
         "links": [
           "https://t.ly/z234reg", "https://t.ly/slopreg", "https://t.ly/x88reg", "https://t.ly/mureg", "https://t.ly/lxreg", "https://t.ly/ggcreg"
-        ]
+        ],
+        "rotY": 0,
+        "targets": [0, 90, 180, 270],
+        "idx": 0
       }
     </script>
   </amp-state>
@@ -274,12 +276,12 @@
       <div class="brand-name">Link Alternatif Slot Gacor 2025</div>
     </div>
     
-    <!-- HOT PROVIDERS SCROLLER (56 Items + Duplicate for Loop) -->
+    <!-- HOT PROVIDERS SCROLLER (2 ROWS GRID) -->
     <section class="provider-section">
       <h2 class="provider-title">PROVIDERS</h2>
       <div class="scroller">
          <div class="scroller-inner">
-             <!-- SET 1: 56 PROVIDERS (7x8 Pattern for demo) -->
+             <!-- LOGOS (Disusun otomatis 2 baris oleh CSS Grid) -->
              <a href="#"><amp-img class="provider-logo" layout="fixed" width="100" height="60" src="https://files.sitestatic.net/images/ppslot.gif?v=1.0" alt="PRAGMATIC"></amp-img></a>
              <a href="#"><amp-img class="provider-logo" layout="fixed" width="100" height="60" src="https://files.sitestatic.net/images/pgsoft.gif?v=0.2" alt="PGSOFT"></amp-img></a>
              <a href="#"><amp-img class="provider-logo" layout="fixed" width="100" height="60" src="https://files.sitestatic.net/assets/imgs/game_logos/100x70/jk_slot.png?v=0.2" alt="JOKER"></amp-img></a>
@@ -377,15 +379,13 @@
           </div>
         </div>
 
-        <!-- 8 SISI (OCTAGON) - Gambar Statis & Stabil -->
+        <!-- 6 SISI (KUBUS PRESISI) -->
         <div class="face f1"><amp-img src="/images/rtpmahjongways2.webp" layout="fill"></amp-img></div>
         <div class="face f2"><amp-img src="/images/rtpolympus1000.webp" layout="fill"></amp-img></div>
         <div class="face f3"><amp-img src="/images/rtpscatterhitam.webp" layout="fill"></amp-img></div>
         <div class="face f4"><amp-img src="/images/rtpstarlightprincess.webp" layout="fill"></amp-img></div>
         <div class="face f5"><amp-img src="/images/rtpsweetbonanza1000.webp" layout="fill"></amp-img></div>
         <div class="face f6"><amp-img src="/images/rtpwildbandito.webp" layout="fill"></amp-img></div>
-        <div class="face f7"><amp-img src="/images/rtpmahjongways2.webp" layout="fill"></amp-img></div>
-        <div class="face f8"><amp-img src="/images/rtpolympus1000.webp" layout="fill"></amp-img></div>
 
       </div>
     </div>
